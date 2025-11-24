@@ -3,7 +3,7 @@ name: Build, Pack & Publish NuGet
 on:
   push:
     tags:
-      - "v*"  # pubblica solo quando crei un tag come v1.0.0
+      - "v*"
 
 jobs:
   build:
@@ -24,8 +24,10 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./artifacts
+    - name: Copy package to artifacts
+      run: |
+        mkdir artifacts
+        cp -v Mediator/bin/Release/*.nupkg artifacts/
 
     - name: Publish to NuGet
       run: dotnet nuget push "./artifacts/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
