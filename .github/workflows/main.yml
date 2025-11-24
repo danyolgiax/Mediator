@@ -1,4 +1,4 @@
-name: Build, Pack & Publish NuGet
+name: Build & Publish to GitHub Packages
 
 on:
   push:
@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
+        source-url: https://nuget.pkg.github.com/danyolgiax/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
 
     - name: Restore
       run: dotnet restore
@@ -30,9 +33,11 @@ jobs:
         mkdir artifacts
         Copy-Item -Path "bin/Release/*.nupkg" -Destination "artifacts" -Verbose
 
-    - name: Publish to NuGet
+    - name: Publish to GitHub Packages
       shell: pwsh
       run: |
         $package = Get-ChildItem -Path "./artifacts" -Filter "*.nupkg" | Select-Object -First 1
-        if (-not $package) { Write-Error "No .nupkg found in artifacts folder"; exit 1 }
-        dotnet nuget push $package.FullName --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        if (-not $package) { Write-Error "No .nupkg found"; exit 1 }
+        dotnet nuget push $package.FullName `
+          --source "https://nuget.pkg.github.com/danyolgiax/index.json" `
+          --api-key ${{ secrets.NUGET_GITHUB_TOKEN }}
