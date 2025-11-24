@@ -1,10 +1,5 @@
 ﻿using Doxo.Mediator.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Doxo.Mediator
 {
@@ -22,13 +17,11 @@ namespace Doxo.Mediator
             var handlerType = typeof(IRequestHandler<,>).MakeGenericType(request.GetType(), typeof(TResponse));
             dynamic handler = _serviceProvider.GetRequiredService(handlerType);
 
-            // Costruisce la pipeline dinamicamente
             var pipelineTypes = typeof(IPipelineBehavior<,>).MakeGenericType(request.GetType(), typeof(TResponse));
             var behaviors = _serviceProvider.GetServices(pipelineTypes).Cast<dynamic>().ToList();
 
             RequestHandlerDelegate<TResponse> handlerDelegate = () => handler.Handle((dynamic)request, cancellationToken);
 
-            // Avvolge gli handler nei behaviors
             foreach (var behavior in behaviors.AsEnumerable().Reverse())
             {
                 var next = handlerDelegate;
