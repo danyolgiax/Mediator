@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	
+	
+
+	
+
+		
+		
+	
+
+
+	<PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Doxo.Mediator</RootNamespace>
+    <AssemblyName>Doxo.Mediator</AssemblyName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Mediator</Title>
+    <Description>A lightweight mediator system that orchestrates C# request handlers for clean, decoupled application logic.</Description>
+		<PackageId>Doxo.Mediator</PackageId>
+		<Version>0.1.0</Version>
+		<Authors>danyolgiax</Authors>
+		<Company>danyolgiax</Company>
+
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
+    <PackageReference Include="Npgsql" Version="8.0.8" />
+  </ItemGroup>
+
+</Project>
