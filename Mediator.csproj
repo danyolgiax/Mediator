@@ -9,7 +9,7 @@
 		<Title>Mediator</Title>
 		<Description>A lightweight mediator system that orchestrates C# request handlers for clean, decoupled application logic.</Description>
 		<PackageId>Doxo.Mediator</PackageId>
-		<Version>0.1.0</Version>
+		<Version>0.1.6</Version>
 		<Authors>danyolgiax</Authors>
 		<Company>danyolgiax</Company>
 
