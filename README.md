@@ -14,7 +14,7 @@ A lightweight mediator system that orchestrates C# request handlers for clean, d
 Install via NuGet:
 
 ```
-dotnet add package Mediator
+dotnet add package Doxo.Mediator
 ```
 
 Or use the NuGet Package Manager in Visual Studio.
