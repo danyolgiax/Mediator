@@ -9,10 +9,10 @@
 		<Title>Mediator</Title>
 		<Description>A lightweight mediator system that orchestrates C# request handlers for clean, decoupled application logic.</Description>
 		<PackageId>Doxo.Mediator</PackageId>
-		<Version>1.0.2</Version>
+		<Version>1.0.7</Version>
 		<Authors>danyolgiax</Authors>
 		<Company>danyolgiax</Company>
-
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
@@ -21,5 +21,7 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
 		<PackageReference Include="Npgsql" Version="8.0.8" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="" />
+	</ItemGroup>
 </Project>
