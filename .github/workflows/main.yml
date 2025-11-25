@@ -27,6 +27,11 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release --no-build -o ./artifacts
 
+    - name: Fix NuGet sources
+      run: |
+        dotnet nuget remove source nuget.org || true
+        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+
     - name: Publish to NuGet.org
       shell: pwsh
       env:
@@ -36,6 +41,6 @@ jobs:
         if (-not $package) { Write-Error "No .nupkg found"; exit 1 }
 
         dotnet nuget push $package.FullName `
-          --source "https://api.nuget.org/v3/index.json" `
+          --source "nuget.org" `
           --api-key $env:NUGET_API_KEY `
           --skip-duplicate
