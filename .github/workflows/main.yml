@@ -24,11 +24,8 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
 
-    - name: Copy package to artifacts
-      shell: pwsh
-      run: |
-        mkdir artifacts
-        Copy-Item -Path "**/bin/Release/*.nupkg" -Destination "artifacts/" -Verbose
+    - name: Pack
+      run: dotnet pack --configuration Release --no-build -o ./artifacts
 
     - name: Publish to NuGet.org
       shell: pwsh
@@ -40,5 +37,5 @@ jobs:
 
         dotnet nuget push $package.FullName `
           --source "https://api.nuget.org/v3/index.json" `
-          --api-key $env:NUGET_API_KEY `
+          --api-key $env:NUGET_APIKEY `
           --skip-duplicate
