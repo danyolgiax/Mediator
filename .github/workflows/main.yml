@@ -1,9 +1,9 @@
-name: Build & Publish GitHub Packages
+name: Build & Publish NuGet
 
 on:
   push:
     tags:
-      - "v*"   # pubblica solo su tag tipo v0.1.4
+      - "v*"
 
 jobs:
   build:
@@ -28,15 +28,17 @@ jobs:
       shell: pwsh
       run: |
         mkdir artifacts
-        Copy-Item -Path "bin/Release/*.nupkg" -Destination "artifacts/" -Verbose
+        Copy-Item -Path "**/bin/Release/*.nupkg" -Destination "artifacts/" -Verbose
 
-    - name: Publish to GitHub Packages
+    - name: Publish to NuGet.org
       shell: pwsh
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_GITHUB_TOKEN }}
+        NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
       run: |
         $package = Get-ChildItem -Path "./artifacts" -Filter "*.nupkg" | Select-Object -First 1
         if (-not $package) { Write-Error "No .nupkg found"; exit 1 }
+
         dotnet nuget push $package.FullName `
-          --source "https://nuget.pkg.github.com/danyolgiax/index.json" `
-          --api-key $env:NUGET_AUTH_TOKEN
+          --source "https://api.nuget.org/v3/index.json" `
+          --api-key $env:NUGET_API_KEY `
+          --skip-duplicate
