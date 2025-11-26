@@ -1,4 +1,4 @@
-name: Build & Publish NuGet
+name: Release NuGet
 
 on:
   push:
@@ -7,40 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    uses: danyolgiax/DevOps.Templates/.github/workflows/nuget-build.yml@main
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
-
-    - name: Restore
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-
-    - name: Pack
-      run: dotnet pack --configuration Release --no-build -o ./artifacts
-
-    - name: Fix NuGet sources
-      run: |
-        dotnet nuget remove source nuget.org || true
-        dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
-
-    - name: Publish to NuGet.org
-      shell: pwsh
-      env:
-        NUGET_API_KEY: ${{ secrets.NUGET_APIKEY }}
-      run: |
-        $package = Get-ChildItem -Path "./artifacts" -Filter "*.nupkg" | Select-Object -First 1
-        if (-not $package) { Write-Error "No .nupkg found"; exit 1 }
-
-        dotnet nuget push $package.FullName `
-          --source "nuget.org" `
-          --api-key $env:NUGET_API_KEY `
-          --skip-duplicate
+  publish:
+    needs: build
+    uses: danyolgiax/DevOps.Templates/.github/workflows/nuget-publish.yml@main
+    secrets:
+      NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
